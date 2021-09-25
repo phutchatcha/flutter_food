@@ -19,10 +19,10 @@ class MyApp extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
           headline6: TextStyle(
-            fontSize: 30.0,
+            fontSize: 16.0,
             fontWeight: FontWeight.bold,
           ),
-          bodyText2: TextStyle(fontSize: 14.0),
+          bodyText2: TextStyle(fontSize: 20.0),
         ),
       ),
       home: LoginPage(),

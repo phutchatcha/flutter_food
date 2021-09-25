@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_food/pages/home/home_page.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -10,15 +13,52 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   var input = '';
 
+  void _showDialog(){
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            "ERROR!",
+            style: TextStyle(color: Colors.black),
+          ),
+          content: Text("Invalid PIN. Please try again!"),
+          actions: [
+            TextButton(
+              child: const Text(
+                'OK',
+                style: TextStyle(
+                  color: Colors.black54,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.pink.shade100,
+              Colors.blue.shade100,
+            ],
+          ),
+        ),
         child: SafeArea(
           child: Column(
             children: [
               Expanded(
-                //ทำให้ส่วนของcontainerอยู่ข้างล่างเสมอ
                 child: Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -31,7 +71,22 @@ class _LoginPageState extends State<LoginPage> {
                         'LOGIN',
                         style: Theme.of(context).textTheme.headline1,
                       ),
-                      Text(input, style: TextStyle(fontSize: 16.0),),
+                      Text(
+                        'Enter PIN to login',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            for(int i=0;i<input.length;i++)
+                              Icon(Icons.circle,size: 30,color: Colors.indigo.shade400,),
+                            for(int i=0;i<6-input.length;i++)
+                              Icon(Icons.circle,size: 30,color: Colors.indigo.shade200,),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -68,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _handleClickButton(int num) {
-    print('Hello $num');
+    print('Press $num');
 
     setState(() {
       if(num == -1){
@@ -77,7 +132,21 @@ class _LoginPageState extends State<LoginPage> {
       }else{
         input = input + '$num'; //input = '$input$num';
       }
-
+      if (input.length == 6) {
+        if (input == '123456') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => homePage(),
+            ),
+          );
+        }
+        else {
+          _showDialog();
+          input = '';
+        }
+      }
+      print('$input');
     });
   }
 }
