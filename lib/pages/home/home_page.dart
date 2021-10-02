@@ -1,41 +1,108 @@
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_food/pages/home/foodpage.dart';
+import 'package:flutter_food/pages/home/profilepage.dart';
 
-class homePage extends StatefulWidget {
-  const homePage({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  static const routeName = '/home';
+
+  const HomePage({Key? key}) : super(key: key);
 
   @override
-  _homePageState createState() => _homePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _homePageState extends State<homePage> {
+class _HomePageState extends State<HomePage> {
+  var _subPageIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('FLUTTER FOOD'),
-        backgroundColor: Colors.pink.shade200,
+        title: _subPageIndex == 0 ? Text('FOOD') : Text('PROFILE'),
+        backgroundColor: Colors.pink.shade100,
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.purple.shade100,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ClipRRect(
+                      borderRadius: BorderRadius.circular(40.0),
+                      child: Container(
+                        width: 80.0,
+                        height: 80.0,
+                        child: Image.asset('assets/images/XuKai.jpg'),
+                      )),
+                  Text(
+                    'Phutchatcha Napalai',
+                    style: TextStyle(fontSize: 20.0, color: Colors.white),
+                  ),
+                  Text(
+                    'Napalai_p@silpakorn.edu',
+                    style: TextStyle(fontSize: 15.0, color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              title: _subPageIndex == 0
+                  ? _buildDrawerItem(
+                  Icon(Icons.fastfood, color: Colors.purple.shade100),
+                  Text(
+                    'Food',
+                    style: TextStyle(color: Colors.purple.shade100),
+                  ))
+                  : _buildDrawerItem(Icon(Icons.fastfood), Text('Food')),
+              onTap: () => _showSubPage(0),
+            ),
+            ListTile(
+              title: _subPageIndex == 1
+                  ? _buildDrawerItem(
+                  Icon(Icons.person, color: Colors.purple.shade100),
+                  Text(
+                    'Profile',
+                    style: TextStyle(color: Colors.purple.shade100),
+                  ))
+                  : _buildDrawerItem(Icon(Icons.person), Text('Profile')),
+              onTap: () => _showSubPage(1),
+            ),
+          ],
+        ),
       ),
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Colors.pink.shade100,
-              Colors.blue.shade100,
-            ],
-          ),
-        ),
-        child: SafeArea(
-          child: Center(
-            child: Text(
-              'THIS IS A HOME PAGE',
-              style: Theme.of(context).textTheme.bodyText2,
-            ),
-          ),
-        ),
+        child: _buildSubPage(),
       ),
+    );
+  }
+
+  _showSubPage(int index) {
+    setState(() {
+      _subPageIndex = index;
+    });
+    Navigator.of(context).pop();
+  }
+
+  _buildSubPage() {
+    switch (_subPageIndex) {
+      case 0: // home page
+        return FoodPage();
+      case 1:
+        return ProfilePage();
+      default:
+        return SizedBox.shrink();
+    }
+  }
+
+  Row _buildDrawerItem(Widget icon, Widget title) {
+    return Row(
+      children: [icon, SizedBox(width: 8.0), title],
     );
   }
 }

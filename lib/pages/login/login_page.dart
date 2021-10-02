@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_food/pages/home/home_page.dart';
 
 class LoginPage extends StatefulWidget {
+  static const routeName = '/login';
+
   const LoginPage({Key? key}) : super(key: key);
 
   @override
@@ -11,47 +11,19 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  var input = '';
-
-  void _showDialog(){
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            "ERROR!",
-            style: TextStyle(color: Colors.black),
-          ),
-          content: Text("Invalid PIN. Please try again!"),
-          actions: [
-            TextButton(
-              child: const Text(
-                'OK',
-                style: TextStyle(
-                  color: Colors.black54,
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
+
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
+
             colors: [
-              Colors.pink.shade100,
-              Colors.blue.shade100,
+              Colors.purple.shade100,
+              Colors.green.shade200,
             ],
           ),
         ),
@@ -66,33 +38,50 @@ class _LoginPageState extends State<LoginPage> {
                       Icon(
                         Icons.lock_outline,
                         size: 100.0,
+                        color: Colors.deepPurple.shade300,
                       ),
                       Text(
                         'LOGIN',
-                        style: Theme.of(context).textTheme.headline1,
+                        style: TextStyle(
+                            color: Colors.deepPurple.shade300,
+                            fontSize: 30.0,
+                            fontWeight: FontWeight.bold),
                       ),
                       Text(
                         'Enter PIN to login',
-                        style: Theme.of(context).textTheme.headline6,
+                        style: TextStyle(fontSize: 20.0),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            for(int i=0;i<input.length;i++)
-                              Icon(Icons.circle,size: 30,color: Colors.indigo.shade400,),
-                            for(int i=0;i<6-input.length;i++)
-                              Icon(Icons.circle,size: 30,color: Colors.indigo.shade200,),
-                          ],
-                        ),
-                      )
+                      SizedBox(height: 80.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          for (var i = 0; i < input.length; i++)
+                            Container(
+                              margin: EdgeInsets.all(4.0),
+                              width: 24.0,
+                              height: 24.0,
+                              decoration: BoxDecoration(
+                                  color: Colors.deepPurple.shade300,
+                                  shape: BoxShape.circle),
+                            ),
+                          for (var i = input.length; i < 6; i++)
+                            Container(
+                              margin: EdgeInsets.all(4.0),
+                              width: 24.0,
+                              height: 24.0,
+                              decoration: BoxDecoration(
+                                color: Colors.deepPurple.shade200,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
               ),
               Container(
-                //color: Colors.pink,
+                //color: Colors.pinkAccent,
                 child: Column(
                   children: [
                     [1, 2, 3],
@@ -105,7 +94,12 @@ class _LoginPageState extends State<LoginPage> {
                       children: row.map((item) {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: LoginButton(
+                          child: item == -2
+                              ? LoginButton(
+                            number: item,
+                            onClick: _handleClickButton,
+                          )
+                              : LoginButton(
                             number: item,
                             onClick: _handleClickButton,
                           ),
@@ -122,34 +116,54 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  String password = '123456';
+  var input = '';
   void _handleClickButton(int num) {
-    print('Press $num');
-
     setState(() {
-      if(num == -1){
-        if (input.length > 0)
-        input = input.substring(0, input.length-1);
-      }else{
-        input = input + '$num'; //input = '$input$num';
+      if (num == -1) {
+        if (input.length > 0) {
+          input = input.substring(0, input.length - 1);
+        }
+      } else {
+        input = '$input$num'; //ตัวเลขที่กดเข้ามา
       }
       if (input.length == 6) {
-        if (input == '123456') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => homePage(),
-            ),
-          );
-        }
-        else {
-          _showDialog();
-          input = '';
+        if (input != password) {
+          _showMaterialDialog('ERROR', 'Invalid PIN. Please try again.');
+          setState(() {
+            input = '';
+          });
+        } else {
+          //ไปหน้า homepage
+          Navigator.pushReplacementNamed(context, HomePage.routeName);
         }
       }
-      print('$input');
     });
   }
+
+  void _showMaterialDialog(String title, String msg) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(msg),
+          actions: [
+            // ปุ่ม OK ใน dialog
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                // ปิด dialog
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
+
 
 class LoginButton extends StatelessWidget {
   final int number;
@@ -157,38 +171,39 @@ class LoginButton extends StatelessWidget {
 
   const LoginButton({
     required this.number,
-    required this.onClick, //ส่งพารามิเตอร์มาเมื่อปุ่มถูกกด
+    required this.onClick,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      //ทำให้ปุ่มกดได้
       customBorder: CircleBorder(),
-      onTap:number == -2 ? null : () => onClick(number),
+      onTap: number == -2 ? null : () => onClick(number),
+
       child: Container(
-          width: 80.0,
-          height: 80.0,
-          decoration: number == -2
-              ? null
-              : BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(width: 2.0),
-                ),
-          child: Center(
-            child: number >= 0
-                ? Text(
-                    '$number', //number.toString()
-                    style: Theme.of(context).textTheme.headline6,
-                  )
-                : (number == -1
-                    ? Icon(
-                        Icons.backspace_outlined,
-                        size: 28.0,
-                      )
-                    : SizedBox.shrink()),
-          )),
+        width: 80.0,
+        height: 80.0,
+        decoration: number == -2
+            ? null
+            : BoxDecoration(
+            shape: BoxShape.circle,
+
+            color: Colors.white24),
+        child: Center(
+          child: number >= 0
+              ? Text(
+            number.toString(),
+            style: Theme.of(context).textTheme.headline6,
+          )
+              : (number == -1
+              ? Icon(
+            Icons.backspace_outlined,
+            size: 24.0,
+          )
+              : SizedBox.shrink()), //ว่าง
+        ),
+      ),
     );
   }
 }
