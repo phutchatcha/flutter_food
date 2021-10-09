@@ -20,15 +20,16 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: _subPageIndex == 0 ? Text('FOOD') : Text('PROFILE'),
-        backgroundColor: Colors.pink.shade100,
+        backgroundColor: Colors.deepPurple.shade200,
       ),
       drawer: Drawer(
+
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
             DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.purple.shade100,
+                color: Colors.green.shade200,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,10 +55,10 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               title: _subPageIndex == 0
                   ? _buildDrawerItem(
-                  Icon(Icons.fastfood, color: Colors.purple.shade100),
+                  Icon(Icons.fastfood, color: Colors.purple.shade300),
                   Text(
                     'Food',
-                    style: TextStyle(color: Colors.purple.shade100),
+                    style: TextStyle(color: Colors.purple.shade300),
                   ))
                   : _buildDrawerItem(Icon(Icons.fastfood), Text('Food')),
               onTap: () => _showSubPage(0),
@@ -65,10 +66,10 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               title: _subPageIndex == 1
                   ? _buildDrawerItem(
-                  Icon(Icons.person, color: Colors.purple.shade100),
+                  Icon(Icons.person, color: Colors.purple.shade300),
                   Text(
                     'Profile',
-                    style: TextStyle(color: Colors.purple.shade100),
+                    style: TextStyle(color: Colors.purple.shade300),
                   ))
                   : _buildDrawerItem(Icon(Icons.person), Text('Profile')),
               onTap: () => _showSubPage(1),

@@ -9,6 +9,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        color: Colors.deepPurple.shade100,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
