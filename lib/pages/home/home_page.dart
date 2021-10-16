@@ -21,6 +21,10 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: _subPageIndex == 0 ? Text('FOOD') : Text('PROFILE'),
         backgroundColor: Colors.deepPurple.shade200,
+        actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+          IconButton(onPressed: () {}, icon: Icon(Icons.refresh)),
+        ],
       ),
       drawer: Drawer(
 
@@ -88,6 +92,17 @@ class _HomePageState extends State<HomePage> {
       _subPageIndex = index;
     });
     Navigator.of(context).pop();
+  }
+
+  _buildHeadPage() {
+    switch (_subPageIndex) {
+      case 0: // home page
+        return Text('FOOD');
+      case 1:
+        return Text('PROFILE');
+      default:
+        return Text('FOOD');
+    }
   }
 
   _buildSubPage() {
