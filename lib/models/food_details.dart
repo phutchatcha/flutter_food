@@ -15,6 +15,7 @@ class _FoodDetailState extends State<FoodDetail> {
   @override
   Widget build(BuildContext context) {
     var foods = ModalRoute.of(context)!.settings.arguments as FoodItem;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('${foods.name}'),
@@ -25,8 +26,19 @@ class _FoodDetailState extends State<FoodDetail> {
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset('assets/images/${foods.image}',width: 550,height: 450,),
+            children: <Widget>[
+
+              AspectRatio(
+                aspectRatio: 3 / 2,
+                child: Image.network(
+                  foods.image,
+                  fit: BoxFit.cover,
+                ),
+                /*child: Image.asset(
+                'assets/images/${foodItem.image}',
+                fit: BoxFit.cover,
+              ),*/
+              ),
               //SizedBox(height: 20.0),
               Padding(padding: const EdgeInsets.all(5.0),
               child: Text(

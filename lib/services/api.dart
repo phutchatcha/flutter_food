@@ -11,7 +11,11 @@ class Api {
       Map<String, dynamic> params,
       ) async {
     var url = Uri.parse('$BASE_URL/$endPoint');
-    final response = await http.post(url, body: params);
+    final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(params),
+    );
 
     if (response.statusCode == 200) {
       // แปลง text ที่มีรูปแบบเป็น JSON ไปเป็น Dart's data structure (List/Map)
